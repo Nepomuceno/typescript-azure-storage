@@ -10,5 +10,7 @@ const tableName = "sampletable";
     SampleInt: 42,
     SampleString: "Amazing!"
   });
+  const record = await storage.GetRecord("SamplePartition", "SampleRow");
+  console.info(record);
   console.log("Table created");
 })();

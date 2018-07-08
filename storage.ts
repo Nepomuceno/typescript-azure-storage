@@ -48,6 +48,38 @@ export class Storage {
     });
   }
 
+  async GetRecord(partitionKey: string, rowKey: string): Promise<ITableEntity> {
+    return new Promise<ITableEntity>((resolve, reject) => {
+      try {
+        this.tableService.retrieveEntity<ITableEntity>(
+          this.tableName,
+          partitionKey,
+          rowKey,
+          (err, entity) => {
+            if (err) throw err;
+            resolve(this.tableRecordToJavacript(entity));
+          }
+        );
+      } catch (err) {
+        reject(err);
+      }
+    });
+  }
+
+  private tableRecordToJavacript(entity: ITableEntity): ITableEntity {
+    let result: any = {};
+    Object.keys(entity).forEach(k => {
+      // we do not want to decode metadata
+      if (k !== ".metadata") {
+        let prop = Object.getOwnPropertyDescriptor(entity, k);
+        if (prop) {
+          result[k] = prop.value["_"];
+        }
+      }
+    });
+    return result;
+  }
+
   private convertToTableRecord(entity: ITableEntity) {
     let result: any = {};
     Object.keys(entity).forEach(k => {
