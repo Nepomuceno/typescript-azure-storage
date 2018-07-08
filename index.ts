@@ -1,11 +1,8 @@
-import * as storage from "azure-storage"
-import * as dotenv from "dotenv";
+import { Storage } from "./storage";
 
-dotenv.load();
-
-const storageClient = storage.createTableService();
 const tableName = "sampletable";
-storageClient.createTableIfNotExists(tableName,(err, result) => {
-    if(err) throw err;
-    console.info(result);
-});
+
+(async () => {
+  await Storage.Create(tableName);
+  console.log("Table created");
+})();
