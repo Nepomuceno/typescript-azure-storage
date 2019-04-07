@@ -24,7 +24,7 @@ export class Storage {
         this.tableService.createTableIfNotExists(
           this.tableName,
           (err, result) => {
-            if (err) throw err;
+            if (err){ reject(err) };
             resolve(result);
           }
         );
@@ -39,7 +39,7 @@ export class Storage {
       try {
         const tr = this.convertToTableRecord(record);
         this.tableService.insertOrMergeEntity(this.tableName, tr, err => {
-          if (err) throw err;
+          if (err){ reject(err) };
           resolve(record);
         });
       } catch (err) {
@@ -56,7 +56,7 @@ export class Storage {
           partitionKey,
           rowKey,
           (err, entity) => {
-            if (err) throw err;
+            if (err){ reject(err) };
             resolve(this.tableRecordToJavacript(entity));
           }
         );
